@@ -1,0 +1,56 @@
+:root {
+    --spring-green: #C8E4B2;
+    --sunny-yellow: #FFD95A;
+    --earth-brown: #8B4513;
+    --text-dark: #2C3E50;
+}
+
+body {
+    background: linear-gradient(45deg, var(--spring-green), #f5f5dc);
+    min-height: 100vh;
+    font-family: 'Comic Sans MS', cursive;
+}
+
+.celebrity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.celebrity-btn {
+    background: var(--sunny-yellow);
+    border: 3px solid var(--earth-brown);
+    border-radius: 15px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.celebrity-btn:hover {
+    transform: scale(1.05);
+    background: #FFEE63;
+}
+
+.marquee {
+    background: var(--earth-brown);
+    color: white;
+    padding: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: marquee 15s linear infinite;
+}
+
+@keyframes marquee {
+    0% { text-indent: 100% }
+    100% { text-indent: -100% }
+}
+
+@media (max-width: 768px) {
+    .celebrity-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    h1 {
+        font-size: 1.5rem;
+    }
+}

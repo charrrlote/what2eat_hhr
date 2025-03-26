@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>监工推荐</title>
+    <link rel="stylesheet" href="./styles/main.css">
+</head>
+<body>
+    <div class="recommendation-container">
+        <h1 id="recommendation-title"></h1>
+        <div class="content-box" id="recommendation-content"></div>
+        <button onclick="window.location.href='index.html'" class="return-btn">返回重选</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const recommendation = JSON.parse(sessionStorage.getItem('currentRecommendation'));
+            if (recommendation?.choices?.[0]?.message?.content) {
+                document.getElementById('recommendation-title').textContent = '监工精心推荐：';
+                document.getElementById('recommendation-content').innerHTML = 
+                    recommendation.choices[0].message.content.replace(/\n/g, '<br>');
+            } else {
+                document.getElementById('recommendation-title').textContent = '推荐获取失败';
+                document.getElementById('recommendation-content').textContent = 
+                    '请返回重新选择监工！';
+            }
+        });
+    </script>
+</body>
+</html>
