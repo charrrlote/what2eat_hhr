@@ -32,9 +32,9 @@ async function fetchRecommendation(name) {
       model: "deepseek-chat",
       messages: [{
         role: "user",
-        content: `我现在很饿，但是不知道吃什么，我不爱吃黄焖鸡、螺蛳粉、兰州拉面，我想吃点平时想不到的食物。请你模仿${name}的语气，用搞笑的语气适当的加入符合这个人特质的动词，让人物形象更生动活泼。让他向我推荐菜品，菜品需要与段子结合起来，需要包含具体的外面店铺或者菜品名。每次输出格式不固定，不要出现黄焖鸡、螺蛳粉、兰州拉面，尽可能从推荐不常见的菜品，或者各地的特色菜，甚至国外美食。尽量避免推荐兰州拉面、黄焖鸡和螺蛳粉，多推荐家常菜，若推荐自己做的简单家常菜，可以用${name}的语气教做菜。推荐语中还应反映出是谁在推荐。`
+        content: `到了点外卖的时间，但是实在想不出来要点什么外卖。${sessionStorage.getItem('userPreference') || '不爱吃黄焖鸡、螺蛳粉、兰州拉面，想吃点平时想不到的食物'}.  请你模仿${name}的语气，用搞笑的语气讲一个段子，段子中融合推荐的菜品，适当的加入符合这个人特质的动词，让人物形象更生动活泼。让他向我推荐菜品，菜品需要与段子结合起来，需要包含具体的外面店铺或者菜品名。每次输出格式不固定，尽可能从推荐不常见的菜品，或者各地的特色菜，甚至国外美食。尽量避免推荐兰州拉面、黄焖鸡和螺蛳粉，多推荐家常菜，若推荐自己做的简单家常菜，可以用${name}的语气教做菜。推荐语中还应反映出是谁在推荐。`
       }],
-      temperature: 0.8,
+      temperature: 0.9,
       stream: true
     })
   });
@@ -97,8 +97,7 @@ function showLoading() {
 
   document.getElementById('reset-btn').addEventListener('click', () => {
   sessionStorage.clear();
-  document.body.innerHTML = '<div class="celebrity-grid"></div>';
-  initCelebrityButtons();
+  location.assign('/');
 });
 
 document.getElementById('retry-btn').addEventListener('click', async () => {
