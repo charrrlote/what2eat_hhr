@@ -3,27 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>监工推荐</title>
+    <title>监工推荐中...</title>
     <link rel="stylesheet" href="./styles/main.css">
 </head>
 <body>
-    <div class="recommendation-container">
-        <h1 id="recommendation-title"></h1>
-        <div class="content-box" id="recommendation-content"></div>
-        <button onclick="window.location.href='index.html'" class="return-btn">返回重选</button>
+    <header class="dynamic-header">
+        <h1 id="status-header">监工正在努力思考中...</h1>
+    </header>
+    
+    <div class="loading-overlay">
+        <div class="spinner"></div>
+        <div id="stream-content" class="stream-container"></div>
+<div class="action-buttons" style="display: flex; gap: 10px; margin-top: 20px;">
+  <button id="retry-btn" style="padding:8px 16px; background:#4CAF50; color:white; border:none; border-radius:4px; cursor:pointer;">换种推荐</button>
+  <button id="reset-btn" style="padding:8px 16px; background:#f44336; color:white; border:none; border-radius:4px; cursor:pointer;">换个人推荐</button>
+</div>
     </div>
 
+    <script src="./scripts/app.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const recommendation = JSON.parse(sessionStorage.getItem('currentRecommendation'));
-            if (recommendation?.choices?.[0]?.message?.content) {
-                document.getElementById('recommendation-title').textContent = '监工精心推荐：';
-                document.getElementById('recommendation-content').innerHTML = 
-                    recommendation.choices[0].message.content.replace(/\n/g, '<br>');
-            } else {
-                document.getElementById('recommendation-title').textContent = '推荐获取失败';
-                document.getElementById('recommendation-content').textContent = 
-                    '请返回重新选择监工！';
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const name = urlParams.get('name');
+            const preference = urlParams.get('preference');
+
+            try {
+                const { content } = await fetchRecommendation(name, preference);
+                document.getElementById('status-header').textContent = '快美美享用我推荐的食物吧';
+                sessionStorage.setItem('currentRecommendation', content);
+                
+                // 绑定按钮事件
+                document.getElementById('reset-btn').addEventListener('click', () => {
+                  sessionStorage.clear();
+                  location.href = 'index.html';
+                });
+
+                document.getElementById('retry-btn').addEventListener('click', async () => {
+                  showLoading();
+                  try {
+                    const recommendation = await fetchRecommendation(name, preference);
+                    document.getElementById('stream-content').innerHTML = recommendation.content.replace(/\n/g, '<br>');
+                    sessionStorage.setItem('currentRecommendation', JSON.stringify(recommendation));
+                  } catch (error) {
+                    console.error('重新推荐失败:', error);
+                    alert('推荐生成失败，请重试！');
+                  }
+                });
+            } catch (error) {
+                console.error('推荐生成失败:', error);
+                alert('推荐失败，请返回重试！');
             }
         });
     </script>
